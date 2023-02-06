@@ -1,4 +1,6 @@
 import ee
+from google.oauth2 import service_account
+from ee import oauth
 import geemap
 import ipyleaflet
 import folium
@@ -9,16 +11,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from streamlit_folium import st_folium
+import matplotlib.pyplot as plt
+import datetime as datetime
 
 
 st.title('California Water Workflow')
 
 #Authenticate and Initialize Google Earth Engine
-key = r"/mnt/c/users/Alex/OneDrive - SeerAI/Desktop/double-catfish-291717-7988bf39cd5b.json"
+##GOOGLE_CLOUD_DISABLE_GRPC=True
+key = st.secrets["credentials_key"]["key"]
+service_account_info = st.secrets["credentials_sa"]["service_account"]
 
-service_account = 'earth-engine@double-catfish-291717.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(service_account, key)
+credentials = service_account.Credentials.from_service_account_info(key, scopes=oauth.SCOPES)
 ee.Initialize(credentials)
+
 
 
 # Initial date of interest (inclusive).
