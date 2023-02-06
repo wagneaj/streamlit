@@ -1062,5 +1062,13 @@ st.sidebar.text(" ")
 st.sidebar.text(" ")
 
 
-image = r"Downloads\seerai_alt_glow"
+import requests
+
+url = "https://github.com/wagneaj/streamlit/blob/ec667b30912b93abacef527b3267c8d1fb48f714/seerai_alt_glow.png"
+#url = "REPLACE-THIS-WITH-THE-URL-OF-THE-CSV-FILE" # Make sure the url is the raw version of the file on GitHub
+download = requests.get(url).content
+
+image = download
+
+#image = r"/mnt/c/Users/Alex/OneDrive - SeerAI/Documents/LogosFinal/platform_logos/light/glow/seerai_alt_glow.png"
 st.sidebar.image(image, use_column_width=True)
