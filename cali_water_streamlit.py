@@ -1105,7 +1105,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 
-img_url = 'https://raw.githubusercontent.com/wagneaj/streamlit/main/seerai_alt_glow.jpeg'
+img_url = 'https://raw.githubusercontent.com/wagneaj/streamlit/main/seerai_alt_glow.png'
 
 response = requests.get(img_url)
 img = Image.open(BytesIO(response.content))
