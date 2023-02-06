@@ -1062,5 +1062,5 @@ st.sidebar.text(" ")
 st.sidebar.text(" ")
 
 
-image = r"Downloads\seerai_alt_glow.png"
+image = r"Downloads\seerai_alt_glow"
 st.sidebar.image(image, use_column_width=True)
