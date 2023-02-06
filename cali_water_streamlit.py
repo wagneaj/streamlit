@@ -1026,7 +1026,7 @@ elif add_radio == 'Groundwater Recharge Rates':
 
 elif add_radio == "Data Connections":
     st.subheader("California Water Workflow Data Connections")
-    video_file = open(r"/mnt/c/users/Alex/Videos/Captures/cali-water.mp4", 'rb')
+    video_file = open(r"Downloads\data_connections", 'rb')
     video_bytes = video_file.read()
 
     st.video(video_bytes)
