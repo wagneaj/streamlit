@@ -1098,9 +1098,17 @@ st.sidebar.text(" ")
 st.sidebar.text(" ")
 
 
+
+
+
 from PIL import Image
-image = Image.open('.seerai_alt_glot.png')
-#image.show()
+import requests
+from io import BytesIO
+
+img_url = 'https://raw.githubusercontent.com/wagneaj/streamlit/main/seerai_alt_glow.jpeg'
+
+response = requests.get(img_url)
+img = Image.open(BytesIO(response.content))
 
 #image = r"/mnt/c/Users/Alex/OneDrive - SeerAI/Documents/LogosFinal/platform_logos/light/glow/seerai_alt_glow.png"
-st.sidebar.image(image, use_column_width=True)
+st.sidebar.image(img, use_column_width=True)
