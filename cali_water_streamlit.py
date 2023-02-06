@@ -1013,7 +1013,7 @@ rech_map.add_child(folium.LayerControl())
 st.sidebar.subheader("Select a Map")
 add_radio = st.sidebar.radio( 
     "Map View",
-    ("Hydraulic Content", "Groundwater Recharge Rates", "Data Connections")
+    ("Hydraulic Content", "Groundwater Recharge Rates", "Depth to Groundwater Change")
 )
 
 if add_radio == "Hydraulic Content":
@@ -1024,12 +1024,48 @@ elif add_radio == 'Groundwater Recharge Rates':
     st.subheader("California Groundwater Recharge")
     st_folium(rech_map)
 
-elif add_radio == "Data Connections":
-    st.subheader("California Water Workflow Data Connections")
-    video_file = open(r"Downloads\data_connections", 'rb')
-    video_bytes = video_file.read()
+##elif add_radio == "Data Connections":
+    ##st.subheader("California Water Workflow Data Connections")
+    ##video_file = open(r"Downloads\data_connections", 'rb')
+    ##video_bytes = video_file.read()
 
-    st.video(video_bytes)
+    ##st.video(video_bytes)
+
+elif add_radio == "Depth to Groundwater Change":
+    st.subheader("California Depth to Groundwater Change by Authority")
+    
+    @st.cache(allow_output_mutation=True)
+    def load_gw():
+        import pandas as pd
+        import requests
+        import io
+    
+        # Downloading the csv file from your GitHub account
+
+        url = "https://raw.githubusercontent.com/wagneaj/streamlit/main/groundwater_level_data_culled.csv" # Make sure the url is the raw version of the file on GitHub
+        download = requests.get(url).content
+
+        # Reading the downloaded content and turning it into a pandas dataframe
+
+        gw = pd.read_csv(io.StringIO(download.decode('utf-8')))
+        ##gw = pd.read_csv(r"/mnt/c/users/Alex/Downloads/groundwater_level_data.csv")
+        gw["datetime"] = pd.to_datetime(gw["MSMT_DATE"])
+
+        return gw
+
+    gw =load_gw()
+    selection = st.sidebar.selectbox("Select Groundwater Authority", gw.GSA_NAME.unique())
+    gw_sub = gw.loc[gw['GSA_NAME'] == selection]
+
+    #plot
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    result = gw_sub.groupby('datetime')['GSE_GWE'].mean()
+    result_df = pd.DataFrame(result)
+    result_smooth = result_df.resample('6m').mean()
+
+    fig = result_smooth.plot()
+    fig.plot(xlabel='date', ylabel='Depth to Groundwater (feet)')
+    st.pyplot(fig.plot(xlabel='date', ylabel='Depth to Groundwater (feet)' ))
     
 
 
@@ -1062,13 +1098,9 @@ st.sidebar.text(" ")
 st.sidebar.text(" ")
 
 
-import requests
-
-url = "https://github.com/wagneaj/streamlit/blob/ec667b30912b93abacef527b3267c8d1fb48f714/seerai_alt_glow.png"
-#url = "REPLACE-THIS-WITH-THE-URL-OF-THE-CSV-FILE" # Make sure the url is the raw version of the file on GitHub
-download = requests.get(url).content
-
-image = download
+from PIL import Image
+image = Image.open('.seerai_alt_glot.png')
+#image.show()
 
 #image = r"/mnt/c/Users/Alex/OneDrive - SeerAI/Documents/LogosFinal/platform_logos/light/glow/seerai_alt_glow.png"
 st.sidebar.image(image, use_column_width=True)
